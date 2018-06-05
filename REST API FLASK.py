@@ -20,7 +20,7 @@ app = Flask(__name__)
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
-
+## find actors with a given and operator
 def filter_with_and(actor,age,gross, filter_actors):
     for key in actors_dict.keys():
             valid= True
@@ -42,8 +42,7 @@ def filter_with_and(actor,age,gross, filter_actors):
             if(valid == True):
                 filter_actors.append(actor_json)
     return(filter_actors)
-
-
+## find actors with a given or operator
 def filter_with_or(parse_string,filter_actors):
     vals=[]
     parse_string=parse_string.split('|')
@@ -77,7 +76,7 @@ def filter_with_or(parse_string,filter_actors):
     return(filter_actors)
 
 
-
+## find actors based on name/age/ or total gross value
 @app.route('/actors', methods=['GET'])
 def filter_actors():
     filter_actors= []
@@ -125,7 +124,7 @@ def filter_actors():
 
     return jsonify({"result":filter_actors})
 
-
+## find specific actor
 @app.route('/actors/<string:actor_name>', methods=['GET'])
 def get_actor_name(actor_name):
 
@@ -145,7 +144,7 @@ def get_actor_name(actor_name):
     return jsonify({'result': actor_record})
 
 
-
+## find specific movie
 @app.route('/movies/<string:movie_name>', methods=['GET'])
 def get_movie_name(movie_name):
 
@@ -164,7 +163,7 @@ def get_movie_name(movie_name):
     return jsonify({'result': movie_record})
 
 
-
+## and operator for querying for movies
 def filter_with_and1(movie,age,gross, filter_movies):
     for key in movies_dict.keys():
             valid= True
@@ -187,7 +186,7 @@ def filter_with_and1(movie,age,gross, filter_movies):
                 filter_movies.append(movie_json)
     return(filter_movies)
 
-
+## or operator for querying movies
 def filter_with_or1(parse_string,filter_movies):
     vals=[]
     parse_string=parse_string.split('|')
@@ -220,7 +219,7 @@ def filter_with_or1(parse_string,filter_movies):
             filter_movies.append(movie_json)
     return(filter_movies)
 
-
+## get a list of movies based on name/year/box_office amount
 @app.route('/movies', methods=['GET'])
 def filter_movies():
     filter_movies= []
@@ -268,7 +267,7 @@ def filter_movies():
 
     return jsonify({"result":filter_movies})
 
-
+## Post actor and correlating information into the JSON document
 @app.route('/actors', methods=['POST'])
 def create_actor():
     if(not request.json):
@@ -306,7 +305,7 @@ def create_actor():
     actors_dict[name]=actor
     return jsonify({'result': actor}), 201
 
-
+## Post movie and correlating information into the JSON document
 @app.route('/movies', methods=['POST'])
 def create_movie():
     if(not request.json):
@@ -351,7 +350,7 @@ def create_movie():
     return jsonify({'result': movie}), 201
 
 
-
+## Edit information of an actor listed in the JSON document
 @app.route('/actors/<string:actor_name>', methods=['PUT'])
 def update_actor(actor_name):
 
@@ -382,7 +381,7 @@ def update_actor(actor_name):
 
     return jsonify({'result': actor_json}), 
 
-
+## Edit information of a movie listed in the JSON document
 @app.route('/movies/<string:movie_name>', methods=['PUT'])
 def update_movie(movie_name):
 
@@ -417,7 +416,7 @@ def update_movie(movie_name):
 
     return jsonify({'result': movie_json}), 
 
-
+## Delete information relating to an actor in the JSON document
 @app.route('/actors/<string:actor_name>', methods=['DELETE'])
 def delete_actor(actor_name):
 
@@ -432,7 +431,7 @@ def delete_actor(actor_name):
     del actors_dict[actor_name]
     return jsonify({'result': True})
 
-
+## Delete information relating to a movie in the JSON document
 @app.route('/movies/<string:movie_name>', methods=['DELETE'])
 def delete_movie(movie_name):
 
@@ -448,7 +447,7 @@ def delete_movie(movie_name):
     return jsonify({'result': True})
 
 
-
+## TEST CASES
 @app.route('/test1/', methods=['GET'])
 def test1():
     filter_names=[]
@@ -473,8 +472,6 @@ def test4():
     filter_names=[]
     filter_names=filter_with_or("name=Bruce|age=50",filter_names)
     return jsonify({'result': filter_names})
-
-
 
 
 @app.route('/test5/', methods=['GET'])
