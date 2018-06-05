@@ -2,6 +2,7 @@ import io
 import time
 import bs4 as bs
 import urllib.request
+## Helper function tries to locate a table or list of movies that the actor acted in the specific actor Wikipedia Page
 def find_actor_movies(result,actor_has_info, movie_list,val):
     if(val == 0):
         movie_table=result.findNext('table')
@@ -45,8 +46,7 @@ def find_actor_movies(result,actor_has_info, movie_list,val):
     
     return(actor_has_info,movie_list)
 
-
-
+## Helper Function makes sure there is a valid Wikipedia Page for an actor
 def film_link(page_link, some_name):
     page_formatted=None
     valid_url=True
@@ -59,8 +59,7 @@ def film_link(page_link, some_name):
         valid_url=False
     return (valid_url,page_formatted)
 
-
-
+#After verifying that an actor has a Wikipedia Page, the function finds the portion of the Page that has the names of the movies that the actor acted in
 def get_actor_info(some_name):
     actor_has_info=0
     val=0
@@ -106,7 +105,7 @@ def get_actor_info(some_name):
         return(True,movie_list)
     else:
         return(False,[]) 
-
+## The following is a helper function that parses the box office amount of a movie which is given in a forum of a string and has abbreviations for its amount (millions instead of 000,000,000 and billions instead of 000,000,000,000)
 def get_money(boxoffice):
     new_money=[]
     money=str(boxoffice.get_text())
@@ -142,8 +141,7 @@ def get_money(boxoffice):
     
     else:
         return 0
-    
-
+## The following is a helper function that looks for the year for which the movie was released in    
 def get_year(release):
     year=1
     releaseinfo=release.find("span", {"class" :"bday dtstart published updated"})
@@ -155,9 +153,8 @@ def get_year(release):
         except:
             year=1
     return year
-    
 
-
+## The main helper function that makes calls to both the box office helper function and get_year of a movie helper function
 def box_office_release(txt,tag_id,page_formatted, found_tags, movie_name):
     tag=None
     try:
@@ -171,7 +168,7 @@ def box_office_release(txt,tag_id,page_formatted, found_tags, movie_name):
     return(tag,found_tags)
 
 
-
+## Overall movie function that validates a movie wikipedia page and then parses the required information (release date/box office) using the helper functions mentioned above
 def get_movie_info(movie_name):
     valid_url=True
     found_tags=0
@@ -231,6 +228,9 @@ def get_movie_info(movie_name):
     else:
         return(False,None,None, [])
 
+    
+## Main portion of the code where the Scraper initially starts at Harrison Ford and then continues to scrape movie and actor information
+## until limits of 125 and 250 are hit for movie count and actor count
 actor_count=0
 movie_count=0
 movie_added=0
